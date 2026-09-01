@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovelock Performance — Hyrox &amp; Functional Fitness Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1C1B19;
+    --surface:#24221F;
+    --surface-2:#2C2A26;
+    --chalk:#F2EFE9;
+    --concrete:#9A9484;
+    --concrete-dim:#726C5F;
+    --hazard:#E8B930;
+    --rust:#B23A2E;
+    --line: rgba(242,239,233,0.12);
+    --maxw: 1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--charcoal);
+    color:var(--chalk);
+    font-family:'Work Sans', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    line-height:1.05;
+    margin:0;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--hazard);
+    outline-offset:3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(28,27,25,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:var(--maxw); margin:0 auto;
+  }
+  .logo-mark{
+    display:flex; align-items:center;
+    text-decoration:none;
+  }
+  .logo-placeholder{
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px;
+    border:1px dashed var(--concrete-dim);
+    color:var(--concrete-dim);
+    font-family:'Oswald', sans-serif;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+  }
+  /* Swap .logo-placeholder for an <img src="logo.svg" alt="Lovelock Performance" class="logo-img"> once Mitch has a logo file */
+  .logo-img{ height:36px; width:auto; display:block; }
+  nav.links{ display:flex; gap:32px; align-items:center; }
+  nav.links a{
+    text-decoration:none;
+    font-size:0.92rem;
+    color:var(--concrete);
+    transition:color 0.15s ease;
+  }
+  nav.links a:hover{ color:var(--chalk); }
+  .btn{
+    display:inline-block;
+    background:var(--hazard);
+    color:var(--charcoal);
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    font-size:0.88rem;
+    padding:12px 22px;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .btn:hover{ background:#f0c94c; transform:translateY(-1px); }
+  .btn.outline{
+    background:transparent;
+    color:var(--chalk);
+    border:1px solid var(--line);
+  }
+  .btn.outline:hover{ border-color:var(--hazard); background:transparent; }
+  .menu-toggle{ display:none; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 88px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-stripe{
+    position:absolute; top:0; right:0; height:100%; width:14px;
+    background:repeating-linear-gradient(45deg, var(--hazard) 0 10px, var(--charcoal) 10px 20px);
+    opacity:0.9;
+  }
+  .hero .wrap{ position:relative; }
+  .eyebrow-tag{
+    font-family:'Oswald', sans-serif;
+    font-size:0.82rem;
+    letter-spacing:0.04em;
+    color:var(--hazard);
+    margin-bottom:18px;
+    opacity:0;
+    animation: rise 0.7s ease forwards;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 5.4vw, 4.4rem);
+    max-width:15ch;
+    opacity:0;
+    animation: rise 0.7s ease 0.1s forwards;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--hazard);
+  }
+  .hero p.lede{
+    margin-top:24px;
+    max-width:52ch;
+    font-size:1.1rem;
+    color:var(--concrete);
+    opacity:0;
+    animation: rise 0.7s ease 0.2s forwards;
+  }
+  .hero-ctas{
+    margin-top:36px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    opacity:0;
+    animation: rise 0.7s ease 0.3s forwards;
+  }
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .hero-stats{
+    margin-top:64px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    border-top:1px solid var(--line);
+    padding-top:28px;
+    max-width:640px;
+    opacity:0;
+    animation: rise 0.7s ease 0.4s forwards;
+  }
+  .hero-stats div{ padding-right:20px; }
+  .hero-stats .num{
+    font-family:'Oswald', sans-serif;
+    font-size:2rem;
+    color:var(--hazard);
+  }
+  .hero-stats .label{
+    font-size:0.82rem;
+    color:var(--concrete);
+    margin-top:4px;
+  }
+
+  /* ---------- SECTION shared ---------- */
+  section{ padding:88px 0; border-bottom:1px solid var(--line); }
+  .section-head{ max-width:640px; margin-bottom:56px; }
+  .kicker{
+    font-family:'Oswald', sans-serif;
+    font-size:0.85rem;
+    color:var(--hazard);
+    margin-bottom:12px;
+  }
+  .section-head h2{ font-size:clamp(1.8rem, 3.4vw, 2.6rem); }
+  .section-head p{ color:var(--concrete); margin-top:16px; font-size:1.02rem; max-width:52ch; }
+
+  /* ---------- HYBRID PERFORMANCE CREW ---------- */
+  .hybrid-grid{
+    display:grid;
+    grid-template-columns:1fr 0.85fr;
+    gap:56px;
+    align-items:start;
+  }
+  .hybrid-copy p{ color:var(--concrete); margin-bottom:16px; max-width:52ch; }
+  .hybrid-copy p:last-of-type{ margin-bottom:0; }
+  .plan-card{
+    border:1px solid var(--line);
+    background:var(--surface);
+    padding:36px 32px;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .plan-card h3{
+    font-size:1.3rem;
+    text-transform:none;
+    letter-spacing:0;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .plan-length{
+    font-size:0.85rem;
+    color:var(--concrete-dim);
+    margin-bottom:20px;
+  }
+  .plan-price{
+    font-family:'Oswald', sans-serif;
+    font-size:2.2rem;
+    color:var(--hazard);
+    margin-bottom:20px;
+  }
+  .plan-price span{
+    font-size:0.95rem;
+    color:var(--concrete);
+    font-family:'Work Sans', sans-serif;
+  }
+  .plan-list{
+    list-style:none;
+    padding:0;
+    margin:0 0 28px;
+    flex-grow:1;
+  }
+  .plan-list li{
+    color:var(--concrete);
+    font-size:0.95rem;
+    padding:9px 0;
+    border-top:1px solid var(--line);
+  }
+  .plan-list li:first-child{ border-top:none; }
+  .plan-note{
+    margin-top:28px;
+    color:var(--concrete-dim);
+    font-size:0.9rem;
+    max-width:60ch;
+  }
+
+  /* ---------- PROGRAM / STATIONS ---------- */
+  .stations{
+    position:relative;
+  }
+  .station-line{
+    position:absolute;
+    left:27px;
+    top:14px;
+    bottom:14px;
+    width:2px;
+    background:var(--line);
+  }
+  .station{
+    display:grid;
+    grid-template-columns:56px 1fr;
+    gap:24px;
+    padding:28px 0;
+    position:relative;
+  }
+  .station:not(:last-child){ border-bottom:1px solid var(--line); }
+  .station-num{
+    font-family:'Oswald', sans-serif;
+    font-size:1.05rem;
+    color:var(--charcoal);
+    background:var(--hazard);
+    width:56px; height:56px;
+    display:flex; align-items:center; justify-content:center;
+    z-index:1;
+  }
+  .station.finish .station-num{
+    background:var(--rust);
+    color:var(--chalk);
+  }
+  .station-body h3{
+    font-size:1.25rem;
+    margin-bottom:8px;
+    text-transform:none;
+    letter-spacing:0;
+    font-weight:600;
+  }
+  .station-body p{
+    color:var(--concrete);
+    max-width:56ch;
+    margin:0;
+  }
+  .station-tag{
+    display:inline-block;
+    font-family:'Oswald', sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    color:var(--concrete-dim);
+    margin-bottom:6px;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:0.85fr 1.15fr;
+    gap:56px;
+    align-items:start;
+  }
+  .about-photo{
+    aspect-ratio:4/5;
+    background:var(--surface);
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--concrete-dim);
+    font-family:'Oswald', sans-serif;
+    font-size:0.85rem;
+    text-align:center;
+    padding:20px;
+  }
+  .about-copy p{ color:var(--concrete); margin-bottom:16px; max-width:56ch; }
+  .about-copy p:last-of-type{ margin-bottom:0; }
+  .credentials{
+    margin-top:28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .credentials span{
+    border:1px solid var(--line);
+    padding:8px 14px;
+    font-size:0.82rem;
+    color:var(--concrete);
+  }
+
+  /* ---------- RESULTS ---------- */
+  .results-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .result-card{
+    background:var(--surface);
+    padding:32px 28px;
+  }
+  .result-card .quote-mark{
+    font-family:'Oswald', sans-serif;
+    font-size:2rem;
+    color:var(--hazard);
+    display:block;
+    margin-bottom:12px;
+  }
+  .result-card p{
+    color:var(--chalk);
+    font-size:0.98rem;
+    margin-bottom:20px;
+  }
+  .result-card .who{
+    font-family:'Oswald', sans-serif;
+    font-size:0.8rem;
+    color:var(--concrete-dim);
+    letter-spacing:0.03em;
+  }
+
+  /* ---------- CTA / FOOTER ---------- */
+  .cta-section{
+    border-bottom:none;
+    text-align:left;
+  }
+  .cta-box{
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:64px 48px;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-box::before{
+    content:"";
+    position:absolute;
+    left:0; top:0; bottom:0; width:6px;
+    background:var(--rust);
+  }
+  .cta-box h2{ font-size:clamp(1.8rem, 3.6vw, 2.8rem); max-width:16ch; }
+  .cta-box p{ color:var(--concrete); margin-top:18px; max-width:48ch; font-size:1.05rem; }
+  .cta-box .btn{ margin-top:32px; }
+
+  footer{
+    padding:48px 0 64px;
+  }
+  .footer-grid{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+  }
+  .footer-links{ display:flex; gap:24px; }
+  .footer-links a{
+    text-decoration:none;
+    color:var(--concrete);
+    font-size:0.88rem;
+  }
+  .footer-links a:hover{ color:var(--hazard); }
+  .footer-note{
+    color:var(--concrete-dim);
+    font-size:0.8rem;
+    margin-top:24px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px){
+    .about-grid{ grid-template-columns:1fr; }
+    .about-photo{ aspect-ratio:16/9; }
+    .results-grid{ grid-template-columns:1fr; }
+    .hybrid-grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width: 700px){
+    nav.links{
+      position:fixed; top:64px; left:0; right:0;
+      background:var(--charcoal);
+      border-bottom:1px solid var(--line);
+      flex-direction:column;
+      align-items:flex-start;
+      padding:24px 28px;
+      gap:18px;
+      transform:translateY(-120%);
+      transition:transform 0.2s ease;
+    }
+    nav.links.open{ transform:translateY(0); }
+    .menu-toggle{
+      display:flex; align-items:center; justify-content:center;
+      width:40px; height:40px;
+      background:transparent; border:1px solid var(--line);
+      color:var(--chalk); cursor:pointer;
+    }
+    .hero-stats{ grid-template-columns:1fr 1fr; }
+    .station{ grid-template-columns:44px 1fr; gap:16px; }
+    .station-num{ width:44px; height:44px; font-size:0.92rem; }
+    .cta-box{ padding:40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a href="#top" class="logo-mark">
+      <span class="logo-placeholder">Logo</span>
+    </a>
+    <nav class="links" id="navLinks">
+      <a href="#hybrid">HYBRID Crew</a>
+      <a href="#program">Coaching</a>
+      <a href="#about">About</a>
+      <a href="#results">Results</a>
+      <a href="#book" class="btn outline">Enquire now</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="hero-stripe" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="eyebrow-tag">Online Hyrox &amp; functional fitness coaching</div>
+      <h1>Train for race day <em>without</em> guessing your programming.</h1>
+      <p class="lede">[Placeholder — a sentence or two on what Lovelock Performance does and who it's for. Keep it specific: the athlete, the problem, the outcome.]</p>
+      <div class="hero-ctas">
+        <a href="#book" class="btn">Enquire now</a>
+        <a href="#hybrid" class="btn outline">See HYBRID Crew</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="num">1:1</div>
+          <div class="label">Individually built programs</div>
+        </div>
+        <div>
+          <div class="num">100%</div>
+          <div class="label">Remote — train from anywhere</div>
+        </div>
+        <div>
+          <div class="num">7d</div>
+          <div class="label">Weekly check-ins &amp; adjustments</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="hybrid">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">HYBRID Performance Crew</div>
+        <h2>A weekly program, not one you write yourself</h2>
+        <p>For people who want real direction and a crew training alongside them, without full 1:1 coaching.</p>
+      </div>
+
+      <div class="hybrid-grid">
+        <div class="hybrid-copy">
+          <p>[Placeholder — explain how the crew works: how sessions are released each week, what "weekly program structure" looks like day to day, and how it's different from a static plan.]</p>
+          <p>[Placeholder — who it's for: athletes who want structure and community without full 1:1 personalisation.]</p>
+        </div>
+
+        <div class="plan-card">
+          <h3>HYBRID Performance Crew</h3>
+          <div class="plan-length">Weekly program structure</div>
+          <div class="plan-price">$[price]<span> /week</span></div>
+          <ul class="plan-list">
+            <li>New sessions released weekly</li>
+            <li>Built around Hyrox's stations</li>
+            <li>Train alongside the crew, not solo</li>
+            <li>Lighter footprint than 1:1 coaching</li>
+          </ul>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSerYClafYaHpjf-icvEuJpOwBxZqWonTQRoCzPstt33X9IsVg/viewform" class="btn" target="_blank" rel="noopener">Enquire about HYBRID Crew</a>
+        </div>
+      </div>
+      <p class="plan-note">[Placeholder — confirm pricing and cadence with Mitch, and whether sessions are delivered via an app, group chat, or something else.]</p>
+    </div>
+  </section>
+
+  <section id="program" class="stations-section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">1:1 coaching</div>
+        <h2>Want it fully personalised? Get Mitch in your corner</h2>
+        <p>A Hyrox race is eight stations, run in order, each one setting up the next. 1:1 coaching works the same way — built around you, adjusted every week.</p>
+      </div>
+
+      <div class="stations">
+        <div class="station-line" aria-hidden="true"></div>
+
+        <div class="station">
+          <div class="station-num">01</div>
+          <div class="station-body">
+            <div class="station-tag">Assessment</div>
+            <h3>A real look at where you're starting from</h3>
+            <p>A call to go through your training history, current fitness, schedule, and what you're racing — or working — toward. No template questionnaire, just a conversation.</p>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="station-num">02</div>
+          <div class="station-body">
+            <div class="station-tag">Programming</div>
+            <h3>A program built around your actual week</h3>
+            <p>Running, strength, and station-specific work laid out for the days and equipment you actually have — gym, home, or hotel room.</p>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="station-num">03</div>
+          <div class="station-body">
+            <div class="station-tag">Check-ins</div>
+            <h3>Weekly feedback, not a set-and-forget plan</h3>
+            <p>Form checks on your lifts, splits on your running, and a program that shifts when your week does — not the other way around.</p>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="station-num">04</div>
+          <div class="station-body">
+            <div class="station-tag">Race prep</div>
+            <h3>Pacing and strategy heading into race day</h3>
+            <p>Station transitions, roxzone pacing, and a taper that has you peaking on the day — not two weeks before it.</p>
+          </div>
+        </div>
+
+        <div class="station finish">
+          <div class="station-num">🏁</div>
+          <div class="station-body">
+            <div class="station-tag">Race day</div>
+            <h3>You run it smarter than last time</h3>
+            <p>That's the job — not just more training, training that's actually pointed at your race.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap about-grid">
+      <div class="about-photo">Photo of Mitch — swap in a training or race-day shot</div>
+      <div class="about-copy">
+        <div class="kicker">Your coach</div>
+        <h2 style="margin-bottom:20px;">Mitch Lovelock</h2>
+        <p>[Placeholder — replace with Mitch's own background: how he got into Hyrox/functional fitness, how long he's competed or coached, and what he's raced.]</p>
+        <p>[Placeholder — a sentence on his coaching philosophy: what he actually believes makes people better at this, in his own words.]</p>
+        <div class="credentials">
+          <span>Add certification</span>
+          <span>Add certification</span>
+          <span>Add race result / division</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="results">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Results</div>
+        <h2>What athletes say after a block</h2>
+      </div>
+      <div class="results-grid">
+        <div class="result-card">
+          <span class="quote-mark">“</span>
+          <p>[Placeholder testimonial — swap in a real client quote once you have one, ideally with a specific result: a time, a PB, a race finish.]</p>
+          <div class="who">— Client name, race/division</div>
+        </div>
+        <div class="result-card">
+          <span class="quote-mark">“</span>
+          <p>[Placeholder testimonial — a second quote, different angle: consistency, coaching communication, or programming around a busy schedule.]</p>
+          <div class="who">— Client name, race/division</div>
+        </div>
+        <div class="result-card">
+          <span class="quote-mark">“</span>
+          <p>[Placeholder testimonial — a third quote once available. Until then, this card can be swapped for a stat: athletes coached, PBs set, or races completed.]</p>
+          <div class="who">— Client name, race/division</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="book" class="cta-section">
+    <div class="wrap">
+      <div class="cta-box">
+        <h2>Start with an enquiry</h2>
+        <p>Tell Mitch about your race, your schedule, and what you're after — he'll get back to you to talk through whether coaching is the right fit.</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSerYClafYaHpjf-icvEuJpOwBxZqWonTQRoCzPstt33X9IsVg/viewform" class="btn" target="_blank" rel="noopener">Enquire now →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <a href="#top" class="logo-mark">
+        <span class="logo-placeholder">Logo</span>
+      </a>
+      <div class="footer-links">
+        <a href="https://instagram.com/mitch.lovelock" target="_blank" rel="noopener">Instagram</a>
+        <a href="#book">Enquire now</a>
+      </div>
+    </div>
+    <div class="footer-note">© <span id="year"></span> Lovelock Performance. Hyrox &amp; functional fitness coaching.</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  var toggle = document.getElementById('menuToggle');
+  var links = document.getElementById('navLinks');
+  toggle.addEventListener('click', function(){
+    var isOpen = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen);
+  });
+  links.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      links.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
+
+</body>
+</html>
