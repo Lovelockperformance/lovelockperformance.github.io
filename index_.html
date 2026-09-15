@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovelock Performance — Hybrid Performance Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1C1B19;
+    --surface:#24221F;
+    --surface-2:#2C2A26;
+    --chalk:#F2EFE9;
+    --concrete:#9A9484;
+    --concrete-dim:#726C5F;
+    --hazard:#E8B930;
+    --rust:#B23A2E;
+    --line: rgba(242,239,233,0.12);
+    --maxw: 1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--charcoal);
+    color:var(--chalk);
+    font-family:'Work Sans', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    line-height:1.05;
+    margin:0;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+
+  a:focus-visible, button:focus-visible, summary:focus-visible{
+    outline:2px solid var(--hazard);
+    outline-offset:3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(28,27,25,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:var(--maxw); margin:0 auto;
+  }
+  .logo-mark{ display:flex; align-items:center; text-decoration:none; }
+  .logo-placeholder{
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px;
+    border:1px dashed var(--concrete-dim);
+    color:var(--concrete-dim);
+    font-family:'Oswald', sans-serif;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+  }
+  /* Swap .logo-placeholder for an <img src="logo.svg" alt="Lovelock Performance" class="logo-img"> once Mitch has a logo file */
+  .logo-img{ height:36px; width:auto; display:block; }
+
+  nav.links{ display:flex; gap:32px; align-items:center; }
+  nav.links a{
+    text-decoration:none;
+    font-size:0.92rem;
+    color:var(--concrete);
+    transition:color 0.15s ease;
+  }
+  nav.links a:hover{ color:var(--chalk); }
+  .btn{
+    display:inline-block;
+    background:var(--hazard);
+    color:var(--charcoal);
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    font-size:0.88rem;
+    padding:12px 22px;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .btn:hover{ background:#f0c94c; transform:translateY(-1px); }
+  .btn.outline{
+    background:transparent;
+    color:var(--chalk);
+    border:1px solid var(--line);
+  }
+  .btn.outline:hover{ border-color:var(--hazard); background:transparent; }
+  .btn.rust{ background:var(--rust); color:var(--chalk); }
+  .btn.rust:hover{ background:#c9483a; }
+  .menu-toggle{ display:none; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 0;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{ position:relative; padding-bottom:64px; }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:48px;
+    align-items:center;
+  }
+  .hero-photo{
+    aspect-ratio:4/5;
+    background:var(--surface);
+    border:1px dashed var(--concrete-dim);
+    border-top:4px solid var(--hazard);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--concrete-dim);
+    font-family:'Oswald', sans-serif;
+    font-size:0.85rem;
+    text-align:center;
+    padding:24px;
+    opacity:0;
+    animation: rise 0.7s ease 0.15s forwards;
+  }
+  .eyebrow-tag{
+    font-family:'Oswald', sans-serif;
+    font-size:0.82rem;
+    letter-spacing:0.04em;
+    color:var(--hazard);
+    margin-bottom:18px;
+    opacity:0;
+    animation: rise 0.7s ease forwards;
+  }
+  .hero h1{
+    font-size:clamp(2.2rem, 5vw, 4rem);
+    max-width:14ch;
+    opacity:0;
+    animation: rise 0.7s ease 0.1s forwards;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--hazard);
+    display:block;
+  }
+  .hero p.lede{
+    margin-top:24px;
+    max-width:52ch;
+    font-size:1.08rem;
+    color:var(--concrete);
+    opacity:0;
+    animation: rise 0.7s ease 0.2s forwards;
+  }
+  .hero p.lede-sub{
+    margin-top:14px;
+    max-width:54ch;
+    font-size:0.98rem;
+    color:var(--concrete-dim);
+    opacity:0;
+    animation: rise 0.7s ease 0.25s forwards;
+  }
+  .hero-ctas{
+    margin-top:36px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    opacity:0;
+    animation: rise 0.7s ease 0.3s forwards;
+  }
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .hero-stats{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    border-top:1px solid var(--line);
+    padding-top:28px;
+    max-width:640px;
+    opacity:0;
+    animation: rise 0.7s ease 0.4s forwards;
+  }
+  .hero-stats div{ padding-right:20px; }
+  .hero-stats .num{
+    font-family:'Oswald', sans-serif;
+    font-size:1.8rem;
+    color:var(--hazard);
+  }
+  .hero-stats .label{
+    font-size:0.8rem;
+    color:var(--concrete);
+    margin-top:4px;
+  }
+
+  /* ---------- SECTION shared ---------- */
+  section{ padding:88px 0; border-bottom:1px solid var(--line); }
+  .section-head{ max-width:680px; margin-bottom:56px; }
+  .section-head.center{ max-width:720px; }
+  .kicker{
+    font-family:'Oswald', sans-serif;
+    font-size:0.85rem;
+    color:var(--hazard);
+    margin-bottom:12px;
+  }
+  .section-head h2{ font-size:clamp(1.7rem, 3.2vw, 2.5rem); }
+  .section-head p{ color:var(--concrete); margin-top:16px; font-size:1.02rem; max-width:54ch; }
+
+  /* ---------- STACCATO TEXT BLOCKS ---------- */
+  .staccato p{ margin:0 0 6px; color:var(--concrete); font-size:1.02rem; }
+  .staccato p:last-child{ margin-bottom:0; }
+  .staccato p.emph{ color:var(--chalk); font-weight:500; }
+  .staccato p.gap{ margin-top:18px; }
+  .pull-line{
+    font-family:'Oswald', sans-serif;
+    font-size:clamp(1.4rem, 2.6vw, 2rem);
+    color:var(--chalk);
+    margin:32px 0;
+    max-width:22ch;
+  }
+  .pull-line span{ color:var(--hazard); }
+
+  /* ---------- FEATURE GRID (what we develop / approach / audience) ---------- */
+  .feature-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .feature-card{ background:var(--surface); padding:30px 26px; }
+  .feature-card .f-tag{
+    font-family:'Oswald', sans-serif;
+    font-size:0.75rem;
+    letter-spacing:0.05em;
+    color:var(--hazard);
+    display:block;
+    margin-bottom:10px;
+  }
+  .feature-card h3{
+    font-size:1.05rem;
+    text-transform:none;
+    letter-spacing:0;
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .feature-card p{ color:var(--concrete); font-size:0.92rem; margin:0; }
+
+  /* ---------- STATIONS / SYSTEM STEPS ---------- */
+  .stations{ position:relative; }
+  .station-line{
+    position:absolute; left:27px; top:14px; bottom:14px; width:2px;
+    background:var(--line);
+  }
+  .station{
+    display:grid;
+    grid-template-columns:56px 1fr;
+    gap:24px;
+    padding:26px 0;
+    position:relative;
+  }
+  .station:not(:last-child){ border-bottom:1px solid var(--line); }
+  .station-num{
+    font-family:'Oswald', sans-serif;
+    font-size:1.05rem;
+    color:var(--charcoal);
+    background:var(--hazard);
+    width:56px; height:56px;
+    display:flex; align-items:center; justify-content:center;
+    z-index:1;
+  }
+  .station.finish .station-num{ background:var(--rust); color:var(--chalk); }
+  .station-body h3{
+    font-size:1.2rem;
+    margin-bottom:8px;
+    text-transform:none;
+    letter-spacing:0;
+    font-weight:600;
+  }
+  .station-body p{ color:var(--concrete); max-width:58ch; margin:0; }
+  .station-tag{
+    display:inline-block;
+    font-family:'Oswald', sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    color:var(--concrete-dim);
+    margin-bottom:6px;
+  }
+
+  /* ---------- PATH GRID (Crew / 1:1) ---------- */
+  .path-intro{ max-width:680px; margin-bottom:48px; }
+  .path-section:not(:last-child){ margin-bottom:80px; }
+  .path-grid{
+    display:grid;
+    grid-template-columns:1fr 0.85fr;
+    gap:56px;
+    align-items:start;
+  }
+  .path-copy p{ color:var(--concrete); margin-bottom:16px; max-width:56ch; }
+  .path-copy p:last-of-type{ margin-bottom:0; }
+  .path-copy h4{
+    font-family:'Oswald', sans-serif;
+    font-size:0.95rem;
+    text-transform:uppercase;
+    color:var(--chalk);
+    margin:26px 0 10px;
+    letter-spacing:0.02em;
+  }
+  .path-copy ul{ margin:0 0 16px; padding-left:20px; color:var(--concrete); }
+  .path-copy ul li{ margin-bottom:6px; }
+
+  .plan-card{
+    border:1px solid var(--line);
+    background:var(--surface);
+    padding:36px 32px;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .plan-card h3{
+    font-size:1.25rem;
+    text-transform:none;
+    letter-spacing:0;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .plan-length{ font-size:0.85rem; color:var(--concrete-dim); margin-bottom:20px; }
+  .plan-price{
+    font-family:'Oswald', sans-serif;
+    font-size:2.2rem;
+    color:var(--hazard);
+    margin-bottom:20px;
+  }
+  .plan-price span{ font-size:0.95rem; color:var(--concrete); font-family:'Work Sans', sans-serif; }
+  .plan-list{ list-style:none; padding:0; margin:0 0 28px; flex-grow:1; }
+  .plan-list li{
+    color:var(--concrete);
+    font-size:0.93rem;
+    padding:9px 0;
+    border-top:1px solid var(--line);
+  }
+  .plan-list li:first-child{ border-top:none; }
+  .plan-list li::before{ content:"✓"; color:var(--hazard); margin-right:8px; font-weight:600; }
+  .plan-note{ margin-top:20px; color:var(--concrete-dim); font-size:0.9rem; max-width:62ch; }
+
+  /* ---------- COMPARE ---------- */
+  .compare-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:24px; }
+  .compare-card{ border:1px solid var(--line); background:var(--surface); padding:32px 28px; }
+  .compare-card h3{
+    font-size:1.05rem;
+    margin-bottom:16px;
+    text-transform:none;
+    font-weight:600;
+    color:var(--hazard);
+  }
+  .compare-card ul{ list-style:none; margin:0; padding:0; }
+  .compare-card li{ color:var(--concrete); padding:9px 0; border-top:1px solid var(--line); font-size:0.95rem; }
+  .compare-card li:first-child{ border-top:none; }
+  .simple-version{ margin-top:44px; }
+  .simple-line{
+    font-family:'Oswald', sans-serif;
+    font-size:clamp(1.1rem, 2vw, 1.4rem);
+    margin-bottom:14px;
+    color:var(--chalk);
+  }
+  .simple-line span{ color:var(--hazard); margin-right:10px; }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{ display:grid; grid-template-columns:0.85fr 1.15fr; gap:56px; align-items:start; }
+  .about-photo{
+    aspect-ratio:4/5;
+    background:var(--surface);
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--concrete-dim);
+    font-family:'Oswald', sans-serif;
+    font-size:0.85rem;
+    text-align:center;
+    padding:20px;
+  }
+  .about-copy p{ color:var(--concrete); margin-bottom:16px; max-width:58ch; }
+  .about-copy p:last-of-type{ margin-bottom:0; }
+  .about-copy h4{
+    font-family:'Oswald', sans-serif;
+    font-size:0.95rem;
+    text-transform:uppercase;
+    color:var(--chalk);
+    margin:26px 0 10px;
+    letter-spacing:0.02em;
+  }
+  .credentials{ margin-top:28px; display:flex; flex-wrap:wrap; gap:10px; }
+  .credentials span{
+    border:1px solid var(--line);
+    padding:8px 14px;
+    font-size:0.82rem;
+    color:var(--concrete);
+  }
+  .credentials span b{ color:var(--hazard); font-weight:600; }
+
+  /* ---------- RESULTS / STAT BAND ---------- */
+  .stat-band{ background:var(--surface); }
+  .stat-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:24px; }
+  .stat-grid .num{ font-family:'Oswald', sans-serif; font-size:clamp(1.8rem, 3.4vw, 2.6rem); color:var(--hazard); }
+  .stat-grid .label{ font-size:0.82rem; color:var(--concrete); margin-top:6px; letter-spacing:0.02em; }
+  .stat-note{ margin-top:44px; color:var(--concrete); max-width:64ch; font-size:1rem; border-top:1px solid var(--line); padding-top:28px; }
+
+  /* ---------- FAQ ---------- */
+  .faq-list{ border-top:1px solid var(--line); max-width:800px; }
+  .faq-item{ border-bottom:1px solid var(--line); padding:22px 0; }
+  .faq-item summary{
+    cursor:pointer;
+    font-family:'Oswald', sans-serif;
+    font-size:1.02rem;
+    list-style:none;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    color:var(--chalk);
+    text-transform:none;
+    letter-spacing:0;
+  }
+  .faq-item summary::-webkit-details-marker{ display:none; }
+  .faq-item summary::after{
+    content:"+";
+    color:var(--hazard);
+    font-size:1.5rem;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .faq-item[open] summary::after{ content:"–"; }
+  .faq-item p{ color:var(--concrete); margin:16px 0 0; max-width:66ch; }
+
+  /* ---------- FINAL CTA ---------- */
+  .cta-section{ border-bottom:none; }
+  .final-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:24px; margin-top:44px; }
+  .final-card{ border:1px solid var(--line); background:var(--surface); padding:36px 32px; position:relative; overflow:hidden; }
+  .final-card::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--hazard); }
+  .final-card.rust::before{ background:var(--rust); }
+  .final-card h3{ font-size:1.15rem; text-transform:none; font-weight:600; margin-bottom:10px; }
+  .final-card p{ color:var(--concrete); margin-bottom:24px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ padding:56px 0 64px; }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:32px; padding-bottom:36px; border-bottom:1px solid var(--line); }
+  .footer-brand p{ color:var(--concrete); font-size:0.92rem; margin:18px 0 0; max-width:34ch; }
+  .footer-col h5{
+    font-family:'Oswald', sans-serif;
+    font-size:0.8rem;
+    letter-spacing:0.04em;
+    color:var(--concrete-dim);
+    margin-bottom:14px;
+    text-transform:uppercase;
+  }
+  .footer-col a{ display:block; text-decoration:none; color:var(--concrete); font-size:0.92rem; margin-bottom:10px; }
+  .footer-col a:hover{ color:var(--hazard); }
+  .footer-note{ color:var(--concrete-dim); font-size:0.8rem; margin-top:24px; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-photo{ aspect-ratio:16/9; order:-1; }
+    .about-grid{ grid-template-columns:1fr; }
+    .about-photo{ aspect-ratio:16/9; }
+    .path-grid{ grid-template-columns:1fr; }
+    .feature-grid{ grid-template-columns:repeat(2, 1fr); }
+    .compare-grid{ grid-template-columns:1fr; }
+    .stat-grid{ grid-template-columns:repeat(2, 1fr); }
+    .final-grid{ grid-template-columns:1fr; }
+    .footer-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width: 700px){
+    nav.links{
+      position:fixed; top:64px; left:0; right:0;
+      background:var(--charcoal);
+      border-bottom:1px solid var(--line);
+      flex-direction:column;
+      align-items:flex-start;
+      padding:24px 28px;
+      gap:18px;
+      transform:translateY(-120%);
+      transition:transform 0.2s ease;
+    }
+    nav.links.open{ transform:translateY(0); }
+    .menu-toggle{
+      display:flex; align-items:center; justify-content:center;
+      width:40px; height:40px;
+      background:transparent; border:1px solid var(--line);
+      color:var(--chalk); cursor:pointer;
+    }
+    .hero-stats{ grid-template-columns:1fr 1fr; }
+    .station{ grid-template-columns:44px 1fr; gap:16px; }
+    .station-num{ width:44px; height:44px; font-size:0.92rem; }
+    .feature-grid{ grid-template-columns:1fr; }
+    .stat-grid{ grid-template-columns:1fr 1fr; }
+    .footer-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a href="#top" class="logo-mark"><span class="logo-placeholder">Logo</span></a>
+    <nav class="links" id="navLinks">
+      <a href="#paths">Programs</a>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+      <a href="#book" class="btn outline">Enquire now</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow-tag">Lovelock Performance — Hybrid Performance Coaching</div>
+          <h1>Train with purpose.<br>Perform under fatigue.<br><em>Race faster.</em></h1>
+          <p class="lede">Structured coaching for athletes who want to become faster runners, stronger movers and better hybrid athletes.</p>
+          <p class="lede-sub">From everyday athletes to serious competitors, Lovelock Performance combines running, strength, conditioning and HYROX-specific training to build the fitness and durability required to perform at your best.</p>
+          <div class="hero-ctas">
+            <a href="#paths" class="btn outline">Explore the programs</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSerYClafYaHpjf-icvEuJpOwBxZqWonTQRoCzPstt33X9IsVg/viewform" class="btn" target="_blank" rel="noopener">Apply for 1:1 coaching</a>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <div class="num">57:30</div>
+              <div class="label">HYROX personal best</div>
+            </div>
+            <div>
+              <div class="num">10+ yrs</div>
+              <div class="label">Coaching &amp; industry experience</div>
+            </div>
+            <div>
+              <div class="num">Elite</div>
+              <div class="label">HYROX competition experience</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-photo">Photo of Mitch — training or race-day shot works best here</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRODUCTION -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Introduction</div>
+        <h2>Build the athlete. Not just the workout.</h2>
+      </div>
+      <div class="staccato" style="max-width:640px;">
+        <p>HYROX and hybrid racing demand more than just fitness.</p>
+        <p>You need to run well.</p>
+        <p>You need to be strong.</p>
+        <p>You need an engine that can keep producing.</p>
+        <p>And most importantly, you need to be able to put it all together when you're already fatigued.</p>
+        <p class="gap emph">Lovelock Performance is built around developing those qualities together.</p>
+        <p>Every session has a purpose. Every training phase has a goal. And every part of the program is designed to move you closer to becoming a better athlete.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT WE DEVELOP -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">What we develop</div>
+        <h2>The complete hybrid athlete</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="f-tag">Running</span>
+          <h3>Aerobic capacity &amp; speed</h3>
+          <p>Develop the aerobic capacity, threshold and speed required to run faster for longer.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">Strength</span>
+          <h3>Strength &amp; durability</h3>
+          <p>Build the strength, power and durability required to perform the stations without compromising your running.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">Engine &amp; conditioning</span>
+          <h3>Sustainable output</h3>
+          <p>Develop the ability to sustain high outputs, recover between efforts and keep producing when fatigue builds.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">HYROX specificity</span>
+          <h3>Race-specific training</h3>
+          <p>Train the combination of running and stations that makes HYROX unique.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">Progression</span>
+          <h3>Planned overload</h3>
+          <p>Build fitness progressively through planned changes in load, pace, volume and intensity.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">Performance</span>
+          <h3>Race-day execution</h3>
+          <p>Learn how to pace, transition and manage fatigue so your fitness actually translates to race day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COACHING PHILOSOPHY -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">The coaching philosophy</div>
+        <h2>Train with purpose</h2>
+      </div>
+      <div class="staccato" style="max-width:640px;">
+        <p>You don't need more random hard sessions.</p>
+        <p>You need the right training, performed consistently and progressed at the right time.</p>
+      </div>
+      <p class="pull-line">Train with purpose.<br>Perform under fatigue.<br><span>Race faster.</span></p>
+      <div class="staccato" style="max-width:640px;">
+        <p>The goal isn't to finish every session completely destroyed.</p>
+        <p>The goal is to create the right stimulus, recover from it and come back better.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW WE TRAIN -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">How we train</div>
+        <h2>A complete performance system</h2>
+      </div>
+      <div class="stations">
+        <div class="station-line" aria-hidden="true"></div>
+        <div class="station">
+          <div class="station-num">01</div>
+          <div class="station-body">
+            <div class="station-tag">Build the engine</div>
+            <h3>Aerobic base, threshold &amp; running</h3>
+            <p>Develop your aerobic base, threshold and running ability.</p>
+          </div>
+        </div>
+        <div class="station">
+          <div class="station-num">02</div>
+          <div class="station-body">
+            <div class="station-tag">Build the strength</div>
+            <h3>Strength &amp; power</h3>
+            <p>Develop the strength and power required to perform efficiently.</p>
+          </div>
+        </div>
+        <div class="station">
+          <div class="station-num">03</div>
+          <div class="station-body">
+            <div class="station-tag">Build the capacity</div>
+            <h3>Sustain high outputs</h3>
+            <p>Learn to sustain high outputs and recover between demanding efforts.</p>
+          </div>
+        </div>
+        <div class="station">
+          <div class="station-num">04</div>
+          <div class="station-body">
+            <div class="station-tag">Combine the qualities</div>
+            <h3>Running, strength &amp; conditioning together</h3>
+            <p>Bring running, strength and conditioning together under fatigue.</p>
+          </div>
+        </div>
+        <div class="station">
+          <div class="station-num">05</div>
+          <div class="station-body">
+            <div class="station-tag">Specificity</div>
+            <h3>Prepare for your target event</h3>
+            <p>Progressively prepare for the exact demands of your target event.</p>
+          </div>
+        </div>
+        <div class="station finish">
+          <div class="station-num">06</div>
+          <div class="station-body">
+            <div class="station-tag">Perform</div>
+            <h3>Turn training into race-day performance</h3>
+            <p>Turn your training into race-day performance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHOOSE YOUR PATH -->
+  <section id="paths">
+    <div class="wrap">
+      <div class="section-head path-intro">
+        <div class="kicker">Choose your path</div>
+        <h2>Two ways to train with Lovelock Performance</h2>
+        <p>Whether you want the structure of a proven program or a completely individualised approach, there is a pathway for you.</p>
+      </div>
+
+      <!-- CREW -->
+      <div class="path-section" id="crew">
+        <div class="section-head" style="margin-bottom:36px;">
+          <div class="kicker">Path 01 — Rolling hybrid group program</div>
+          <h2>Lovelock Performance Crew</h2>
+          <p>Structured programming. Proven framework. Training community.</p>
+        </div>
+        <div class="path-grid">
+          <div class="path-copy">
+            <p>The Lovelock Performance Crew is for athletes who want structured HYROX and hybrid programming without needing fully individualised 1:1 coaching. The program combines running, strength, threshold, conditioning, HYROX-specific training and race-specific work.</p>
+            <p>Your training continually progresses, allowing you to build fitness and strength throughout the year rather than constantly starting from scratch for every race.</p>
+
+            <h4>Who is it for?</h4>
+            <ul>
+              <li>Preparing for your first HYROX</li>
+              <li>Chasing a new PB</li>
+              <li>Preparing for an upcoming event</li>
+              <li>Looking to improve your running</li>
+              <li>Wanting to become fitter and stronger</li>
+              <li>Looking for structured training and community</li>
+            </ul>
+            <p>The framework stays the same. Your effort and execution are what you control.</p>
+
+            <h4>Why a rolling program?</h4>
+            <p>Your next race might be four weeks away, or six months away. Either way, you shouldn't need to completely restart your training every time you enter a new event. The Crew continuously develops the qualities required for hybrid performance while regularly bringing in more race-specific work. Build your engine. Build your strength. Build your durability. Then learn to perform under fatigue.</p>
+          </div>
+
+          <div class="plan-card">
+            <h3>Lovelock Performance Crew</h3>
+            <div class="plan-length">Ongoing rolling program — beginner through advanced</div>
+            <ul class="plan-list">
+              <li>Ongoing rolling programming</li>
+              <li>Structured weekly training through FITR</li>
+              <li>Running and engine development</li>
+              <li>Strength programming</li>
+              <li>Threshold and conditioning sessions</li>
+              <li>HYROX-specific training</li>
+              <li>Race simulation sessions</li>
+              <li>Exercise demonstrations</li>
+              <li>Scalable options</li>
+              <li>Progressive load, pace and volume</li>
+              <li>Training community</li>
+            </ul>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSerYClafYaHpjf-icvEuJpOwBxZqWonTQRoCzPstt33X9IsVg/viewform" class="btn outline" target="_blank" rel="noopener">Join the Performance Crew</a>
+            <p class="plan-note">[Placeholder — confirm Crew pricing and billing cadence with Mitch.]</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1:1 -->
+      <div class="path-section" id="one-on-one">
+        <div class="section-head" style="margin-bottom:36px;">
+          <div class="kicker">Path 02 — Individualised hybrid performance coaching</div>
+          <h2>1:1 Online Coaching</h2>
+          <p>Your training. Your goals. Your program.</p>
+        </div>
+        <div class="path-grid">
+          <div class="path-copy">
+            <p>1:1 coaching is designed for athletes who are serious about improving their HYROX performance and want their training built specifically around their goals, current fitness, strengths, weaknesses and race calendar. This isn't a generic program delivered to everyone. Your training is built around you.</p>
+
+            <h4>The difference</h4>
+            <p>The biggest difference with 1:1 coaching is that you're not simply receiving a program. You're being coached. Your training is reviewed. Your feedback matters. Your sessions are adjusted when required. Your weaknesses are identified and addressed. And your entire training block can be built around your target race.</p>
+            <p>Whether you're preparing for HYROX Melbourne or another race on your calendar, the goal is to build the athlete you need to be on race day.</p>
+          </div>
+
+          <div class="plan-card">
+            <h3>1:1 Online Coaching</h3>
+            <div class="plan-length">Fully individualised programming</div>
+            <div class="plan-price">$125<span> /week</span></div>
+            <ul class="plan-list">
+              <li>Fully personalised weekly programming</li>
+              <li>Running + HYROX-specific training</li>
+              <li>Strength programming integrated around your HYROX goals</li>
+              <li>Race-specific preparation and pacing</li>
+              <li>Individualised training adjustments</li>
+              <li>Weekly check-in calls with Mitch</li>
+              <li>Ongoing communication and support</li>
+              <li>Guidance around recovery and training load</li>
+              <li>Fuelling guidance</li>
+              <li>Regular program review and progression</li>
+              <li>Full preparation leading into your target race</li>
+            </ul>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSerYClafYaHpjf-icvEuJpOwBxZqWonTQRoCzPstt33X9IsVg/viewform" class="btn" target="_blank" rel="noopener">Apply for 1:1 coaching</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHICH OPTION -->
+      <div class="section-head center" style="margin-top:80px;">
+        <div class="kicker">Not sure where to start?</div>
+        <h2>Which option is right for you?</h2>
+      </div>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3>Choose the Crew if:</h3>
+          <ul>
+            <li>You want structured programming</li>
+            <li>You enjoy training alongside other athletes</li>
+            <li>You want a proven hybrid performance framework</li>
+            <li>You don't need your entire program individually designed</li>
+            <li>You want flexibility and ongoing programming</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <h3>Choose 1:1 if:</h3>
+          <ul>
+            <li>You have a specific performance goal</li>
+            <li>You want your training built around your strengths and weaknesses</li>
+            <li>You have a target race you want to peak for</li>
+            <li>You want regular feedback and accountability</li>
+            <li>You want individualised running and HYROX programming</li>
+            <li>You want direct coaching and ongoing adjustments</li>
+          </ul>
+        </div>
+      </div>
+      <div class="simple-version">
+        <div class="simple-line"><span>→</span>Want structured training? Performance Crew.</div>
+        <div class="simple-line"><span>→</span>Want individualised coaching? 1:1 Coaching.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap about-grid">
+      <div class="about-photo">Photo of Mitch — swap in a training or race-day shot</div>
+      <div class="about-copy">
+        <div class="kicker">Coaching built from experience</div>
+        <h2 style="margin-bottom:20px;">Mitch Lovelock</h2>
+        <p>Lovelock Performance was created by Mitch Lovelock to help athletes train with more purpose and perform at a higher level. With more than 10 years of experience in the fitness industry, Mitch has coached athletes across a wide range of abilities while continuing to train and compete himself.</p>
+        <p>His own HYROX journey has progressed from approximately 1:09 to a 57:30 personal best, with multiple sub-60-minute performances and elite-level competition experience. That experience shapes the way Lovelock Performance coaches — not just theory, not just workouts, but years of coaching, training, racing, testing and learning what actually moves performance forward.</p>
+
+        <h4>Hybrid Performance Coach</h4>
+        <p>Mitch's approach is simple: identify what is holding you back, train the qualities that matter, progress them over time, then learn to perform them under fatigue. His own experience as an athlete means he understands that performance isn't built from perfect training weeks — it's built through consistency, intelligent programming and learning how to adapt when things don't go exactly to plan. That is the same approach he brings to his athletes.</p>
+
+        <div class="credentials">
+          <span><b>57:30</b> HYROX personal best</span>
+          <span><b>10+ years</b> coaching &amp; fitness industry experience</span>
+          <span><b>Elite</b> HYROX competition experience</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE LOVELOCK APPROACH -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">The Lovelock approach</div>
+        <h2>Less randomness. More intention.</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="f-tag">01</span>
+          <h3>Purpose</h3>
+          <p>Every session should have a reason.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">02</span>
+          <h3>Progression</h3>
+          <p>Training needs to evolve as you improve.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">03</span>
+          <h3>Specificity</h3>
+          <p>The closer you get to race day, the more specific your preparation becomes.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">04</span>
+          <h3>Balance</h3>
+          <p>Running, strength, conditioning and recovery all have a place.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">05</span>
+          <h3>Performance</h3>
+          <p>The objective isn't simply to complete more training. It's to perform better.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO IS IT FOR -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Who is Lovelock Performance for?</div>
+        <h2>Everyday athletes. Serious competitors.</h2>
+        <p>You don't have to be an elite athlete to train like one. Lovelock Performance is for athletes who are willing to work consistently and want their training to have direction.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="f-tag">Beginner</span>
+          <h3>New to HYROX</h3>
+          <p>You've entered your first HYROX and want a structured way to prepare.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">Intermediate</span>
+          <h3>Chasing a better time</h3>
+          <p>You've raced before and want to improve your time and overall performance.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">Advanced</span>
+          <h3>Closing the gaps</h3>
+          <p>You're already performing well and want to identify and attack the areas holding you back.</p>
+        </div>
+        <div class="feature-card">
+          <span class="f-tag">Elite</span>
+          <h3>Competing at a high level</h3>
+          <p>You're competing at a high level and want individualised programming designed around performance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS & CREDIBILITY -->
+  <section class="stat-band">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Results &amp; credibility</div>
+        <h2>Performance that speaks for itself</h2>
+      </div>
+      <div class="stat-grid">
+        <div>
+          <div class="num">57:30</div>
+          <div class="label">HYROX personal best</div>
+        </div>
+        <div>
+          <div class="num">Sub-60</div>
+          <div class="label">Multiple sub-60 HYROX performances</div>
+        </div>
+        <div>
+          <div class="num">10+ years</div>
+          <div class="label">Coaching &amp; fitness industry experience</div>
+        </div>
+        <div>
+          <div class="num">Elite</div>
+          <div class="label">HYROX competition experience</div>
+        </div>
+      </div>
+      <p class="stat-note">The same principles used to develop elite performance are applied to every athlete — scaled to their experience, ability and goals.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">FAQ</div>
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Do I need to have done a HYROX before?</summary>
+          <p>No. The programs are suitable for athletes across different levels of experience.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is the Performance Crew individualised?</summary>
+          <p>No. The Crew follows the Lovelock Performance framework and provides scalable options for different abilities. If you want your entire program built around your individual strengths, weaknesses and race calendar, 1:1 coaching is the better option.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What if I'm a beginner?</summary>
+          <p>That's completely fine. You don't need to be an elite athlete to join the Crew. The goal is to progressively develop your fitness, strength and ability.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What if I'm already an experienced HYROX athlete?</summary>
+          <p>The programming is designed to develop advanced hybrid performance qualities and includes race-specific work. If you need highly individualised programming around a specific performance goal, 1:1 coaching is recommended.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How is the program delivered?</summary>
+          <p>Training is delivered through FITR, giving you access to your sessions, instructions and exercise demonstrations.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I join if I have a race coming up?</summary>
+          <p>Yes. The Crew is a rolling program, so you don't have to wait for a new training block to begin. If you have a specific race and want your entire preparation individually structured around it, consider 1:1 coaching.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What does 1:1 coaching cost?</summary>
+          <p>1:1 coaching is $125 per week. This includes personalised programming, weekly check-in calls, ongoing communication and individualised adjustments throughout your training.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How do I apply for 1:1 coaching?</summary>
+          <p>Complete the application form and Mitch will review your details and get in touch regarding the next steps.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I switch from the Crew to 1:1?</summary>
+          <p>Yes. If your goals become more specific or you decide you want individualised coaching, you can move into 1:1 coaching.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section id="book" class="cta-section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Ready to train with purpose?</div>
+        <h2>Choose your path</h2>
+        <p>You don't need another random workout. You need a plan — one that develops your engine, builds your strength, improves your ability to perform under fatigue, and ultimately makes you a better athlete.</p>
+      </div>
+      <div class="final-grid">
+        <div class="final-card">
+          <h3>Lovelock Performance Crew</h3>
+          <p>Structured hybrid programming for athletes who want to keep progressing.</p>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSerYClafYaHpjf-icvEuJpOwBxZqWonTQRoCzPstt33X9IsVg/viewform" class="btn outline" target="_blank" rel="noopener">Join the Performance Crew</a>
+        </div>
+        <div class="final-card rust">
+          <h3>1:1 Online Coaching</h3>
+          <p>Individualised coaching for athletes who want to take their performance further.</p>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSerYClafYaHpjf-icvEuJpOwBxZqWonTQRoCzPstt33X9IsVg/viewform" class="btn rust" target="_blank" rel="noopener">Apply for 1:1 coaching</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo-mark"><span class="logo-placeholder">Logo</span></a>
+        <p>Hybrid Performance Coaching. Train with purpose. Perform under fatigue. Race faster.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Programs</h5>
+        <a href="#crew">Lovelock Performance Crew</a>
+        <a href="#one-on-one">1:1 Online Coaching</a>
+      </div>
+      <div class="footer-col">
+        <h5>Connect</h5>
+        <a href="https://instagram.com/mitch.lovelock" target="_blank" rel="noopener">Instagram</a>
+        <a href="#book">Enquire now</a>
+      </div>
+    </div>
+    <div class="footer-note">For coaching enquiries, use the application links above. © <span id="year"></span> Lovelock Performance.</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  var toggle = document.getElementById('menuToggle');
+  var links = document.getElementById('navLinks');
+  toggle.addEventListener('click', function(){
+    var isOpen = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen);
+  });
+  links.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      links.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
+
+</body>
+</html>
